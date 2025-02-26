@@ -18,18 +18,18 @@ function App() {
   //const navigate = useNavigate();
 
   // Isaac, my sweet summer child, please turn your attention here
-  const { data: words = [] } = useQuery({ queryKey: ["words"], queryFn: fetchWords });
+  // const { data: words = [] } = useQuery({ queryKey: ["words"], queryFn: fetchWords });
 
-  const submitWords = useMutation({
-    mutationFn: async (selected: string[]) => {
-      const response = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ words: selected })
-      });
-      return response.json();
-    }
-  });
+  // const submitWords = useMutation({
+  //   mutationFn: async (selected: string[]) => {
+  //     const response = await fetch("/api/submit", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ words: selected })
+  //     });
+  //     return response.json();
+  //   }
+  // });
 
 
 
