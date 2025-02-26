@@ -6,6 +6,8 @@ import "@fontsource/libre-franklin/300.css";
 import "@fontsource/libre-franklin/400.css";
 import "@fontsource/libre-franklin/600.css";
 import "@fontsource/libre-franklin/700.css";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { fetchWords } from "./api.ts";
 
 function App() {
   const [allWords, setAllWords] = useState<string[]>(["Apple", "Banana", "Cherry", "Date",
@@ -14,6 +16,23 @@ function App() {
     "Test5", "Test6", "Test7", "Test8"]);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   //const navigate = useNavigate();
+
+  // Isaac, my sweet summer child, please turn your attention here
+  const { data: words = [] } = useQuery({ queryKey: ["words"], queryFn: fetchWords });
+
+  const submitWords = useMutation({
+    mutationFn: async (selected: string[]) => {
+      const response = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ words: selected })
+      });
+      return response.json();
+    }
+  });
+
+
+
 
   const shuffleArray = (array: string[]) => {
     const newArray = [...array];
