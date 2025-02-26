@@ -97,7 +97,7 @@ function App() {
       </Box>
       <Divider></Divider>
       <Typography fontFamily={"Libre Franklin"} fontWeight={300} fontSize={"14px"} marginTop={"15px"} marginBottom={"15px"}>
-        © 2025 Keenan Schott. All Rights Reserved.
+        © 2025 Keenan Schott. All Rights Reserved. 
       </Typography>
     </Container>
   );
