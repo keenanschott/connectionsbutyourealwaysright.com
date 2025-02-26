@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Box, Button, Card, Typography, Container, Grid, Divider } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import "@fontsource/libre-franklin/900.css";
 import "@fontsource/libre-franklin/200.css";
 import "@fontsource/libre-franklin/300.css";
@@ -14,6 +13,7 @@ function App() {
     "Test1", "Test2", "Test3", "Test4",
     "Test5", "Test6", "Test7", "Test8"]);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
+  //const navigate = useNavigate();
 
   const shuffleArray = (array: string[]) => {
     const newArray = [...array];
@@ -26,7 +26,7 @@ function App() {
     
   return (
     <Container style={{ width: "100%", textAlign: "center", marginTop: "1rem" }}>
-      <Typography variant="h4" gutterBottom fontFamily={"Libre Franklin"} fontWeight={900} onClick={() => useNavigate("./")} >
+      <Typography variant="h4" gutterBottom fontFamily={"Libre Franklin"} fontWeight={900} onClick={() => console.log("add navigation at some point")} >
         Connections
       </Typography>
       <Typography marginBottom={"1rem"} variant="h2" gutterBottom fontSize={12} fontFamily={"Libre Franklin"} fontWeight={200}>
@@ -87,7 +87,6 @@ function App() {
           variant="contained"
           sx={{ fontFamily: "Libre Franklin", fontWeight: "600", bgcolor: "white", color: "black", borderRadius: "20px", cursor: "pointer", "&:hover": { bgcolor: "white", boxShadow: "none" }, border: "1px solid black", boxShadow: "none", textTransform: "none" }}
           onClick={() => {
-            // reset selected words
             setSelectedWords([]);
           }}
           disabled={selectedWords.length !== 4} // Disable if not exactly 4 words are selected
