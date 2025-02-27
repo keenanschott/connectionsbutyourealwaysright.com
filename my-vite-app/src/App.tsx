@@ -15,7 +15,8 @@ function App() {
   const [allWords, setAllWords] = useState<string[]>([]);
   const { data: backendWords = [], isLoading } = useQuery({ 
     queryKey: ["words"], 
-    queryFn: fetchWords 
+    queryFn: fetchWords,
+    staleTime: Infinity
   });
 
   useEffect(() => {
