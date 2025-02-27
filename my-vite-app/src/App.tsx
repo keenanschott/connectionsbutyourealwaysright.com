@@ -7,12 +7,13 @@ import "@fontsource/libre-franklin/400.css";
 import "@fontsource/libre-franklin/600.css";
 import "@fontsource/libre-franklin/700.css";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { fetchWords } from "./api.ts";
+import { fetchWords, submitWords } from "./api.ts";
 
 function App() {
   const [isInitialLoad] = useState(true);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [allWords, setAllWords] = useState<string[]>([]);
+  const [correctCount, setCorrectCount] = useState(0);
   const { data: backendWords = [], isLoading } = useQuery({ 
     queryKey: ["words"], 
     queryFn: fetchWords,
@@ -28,16 +29,13 @@ function App() {
   }, [backendWords]);
 
   const submitWordsMutation = useMutation({
-    mutationFn: async (selected: string[]) => {
-      const response = await fetch("/api/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ words: selected })
-      });
-      if (!response.ok) {
-        throw new Error('Failed to submit words');
-      }
-      return response.json();
+    mutationFn: submitWords,
+    onSuccess: () => {
+      setCorrectCount(correctCount + 1);
+      setSelectedWords([]);
+    },
+    onError: () => {
+      console.error("Error submitting words");
     }
   });
 
@@ -113,13 +111,10 @@ function App() {
         <Button
           variant="contained"
           sx={{ fontFamily: "Libre Franklin", fontWeight: "600", bgcolor: "white", color: "black", borderRadius: "20px", cursor: "pointer", "&:hover": { bgcolor: "white", boxShadow: "none" }, border: "1px solid black", boxShadow: "none", textTransform: "none" }}
-          onClick={() => {
-            submitWordsMutation.mutate(selectedWords);
-            setSelectedWords([]);
-          }}
-          disabled={selectedWords.length !== 4} // Disable if not exactly 4 words are selected
+          onClick={() => submitWordsMutation.mutate(selectedWords)}
+          disabled={selectedWords.length !== 4 || submitWordsMutation.isPending} // Disable if not exactly 4 words are selected
         >
-          Submit
+          {submitWordsMutation.isPending ? 'Submitting...' : 'Submit'}
         </Button>
       </Box>
       <Divider></Divider>
