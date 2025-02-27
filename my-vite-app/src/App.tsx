@@ -9,11 +9,16 @@ import "@fontsource/libre-franklin/700.css";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchWords, submitWords } from "./api.ts";
 
+type Category = {
+  category: string;
+  words: string[];
+}
+
 function App() {
   const [isInitialLoad] = useState(true);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [allWords, setAllWords] = useState<string[]>([]);
-  const [correctCount, setCorrectCount] = useState(0);
+  const [completedCategories, setCompletedCategories] = useState<Category[]>([]);
   const { data: backendWords = [], isLoading } = useQuery({ 
     queryKey: ["words"], 
     queryFn: fetchWords,
@@ -30,8 +35,12 @@ function App() {
 
   const submitWordsMutation = useMutation({
     mutationFn: submitWords,
-    onSuccess: () => {
-      setCorrectCount(correctCount + 1);
+    onSuccess: (data) => {
+      const category: Category = {
+        category: data.category,
+        words: selectedWords
+      };
+      setCompletedCategories([...completedCategories, category]);
       setSelectedWords([]);
     },
     onError: () => {
@@ -63,6 +72,11 @@ function App() {
       </Typography>
       <Container style={{ width: "60%" }}>
       <Grid container spacing={1} justifyContent="center">
+        {completedCategories.map((category, index) => (
+          <Grid item xs={12} key={index}>
+            <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.category.toUpperCase()}</Typography>
+          </Grid>
+        ))}
         {allWords.map((word, index) => (
           <Grid item xs={3} key={index}>
             <Card

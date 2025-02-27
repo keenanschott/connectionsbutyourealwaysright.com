@@ -6,7 +6,7 @@ export async function fetchWords(): Promise<string[]> {
     return response.json();
   }
 
-export async function submitWords(selected: string[]): Promise<{ success: boolean }> {
+export async function submitWords(selected: string[]): Promise<{ success: boolean, category: string }> {
   const response = await fetch('/api/submit', {
     method: 'POST',
     headers: {
