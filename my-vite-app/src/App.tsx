@@ -29,6 +29,8 @@ function App() {
     staleTime: Infinity
   });
 
+  const colors = ["#f8df6b", "#a1c35b", "#b0c3ef", "#b981c5"];
+
   useEffect(() => {
     setAllWords(backendWords);
   }, [backendWords]);
@@ -42,6 +44,7 @@ function App() {
       };
       setCompletedCategories([...completedCategories, category]);
       setSelectedWords([]);
+      setAllWords(allWords.filter((word) => !selectedWords.includes(word)));
     },
     onError: () => {
       console.error("Error submitting words");
@@ -74,7 +77,11 @@ function App() {
       <Grid container spacing={1} justifyContent="center">
         {completedCategories.map((category, index) => (
           <Grid item xs={12} key={index}>
-            <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.category.toUpperCase()}</Typography>
+            <Card sx={{ borderRadius: "6px", boxShadow: "none", padding: 2, backgroundColor: colors[index], color: "black" }}>
+              <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.category.toUpperCase()}</Typography>
+              <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.words.join(", ")}</Typography>
+            </Card>
+            
           </Grid>
         ))}
         {allWords.map((word, index) => (
