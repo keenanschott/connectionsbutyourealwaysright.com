@@ -71,7 +71,7 @@ app.post('/api/submit', async (req, res) => {
         {
           role: "user",
           content:
-          "Pretend you are the New York Times Connections game - give me the category of these four words: " + words + ". Respond with just the category, no explanation or other text."
+          "Pretend you are the New York Times Connections game - give me the category of these four words: " + words + ". Respond with just the category, no explanation, other text, or punctuation."
         }
       ],
       model: "gpt-4o",
