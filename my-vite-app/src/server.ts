@@ -40,10 +40,11 @@ app.get('/api/words', async (req, res) => {
       messages: [
         {
           role: "user",
-          content: "Generate a list of 16 random, interesting single words. Respond with just the words separated by commas, no explanation or other text."
+          content:
+          "Generate a list of 16 random, interesting single words, no more than 12 characters each. You can include characters or celebrities, but stick to more basic words than non-basic words. Whatever words you think of first, throw out, and think of new ones 2 to 7 more times. Separate each word with a comma, and do not include any punctuation beyond the commas."
         }
       ],
-      model: "gpt-4o-mini",
+      model: "gpt-4o",
     });
 
     const response = completion.choices[0].message.content;

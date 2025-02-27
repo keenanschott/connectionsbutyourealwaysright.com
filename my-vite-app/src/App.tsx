@@ -10,12 +10,16 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchWords } from "./api.ts";
 
 function App() {
-  
+  const [isInitialLoad] = useState(true);
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [allWords, setAllWords] = useState<string[]>([]);
   const { data: backendWords = [], isLoading } = useQuery({ 
     queryKey: ["words"], 
     queryFn: fetchWords,
+    enabled: isInitialLoad,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
     staleTime: Infinity
   });
 
