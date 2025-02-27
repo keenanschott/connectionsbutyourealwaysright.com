@@ -19,7 +19,7 @@ function App() {
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
   const [allWords, setAllWords] = useState<string[]>([]);
   const [completedCategories, setCompletedCategories] = useState<Category[]>([]);
-  const { data: backendWords = [], isLoading } = useQuery({ 
+  const { data: backendWords = [] } = useQuery({ 
     queryKey: ["words"], 
     queryFn: fetchWords,
     enabled: isInitialLoad,

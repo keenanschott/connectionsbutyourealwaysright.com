@@ -34,7 +34,7 @@ let words = [
   "Test5", "Test6", "Test7", "Test8"
 ];
 
-app.get('/api/words', async (req, res) => {
+app.get('/api/words', async (_, res) => {
   try {
     const completion = await openai.chat.completions.create({
       messages: [
