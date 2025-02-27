@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Card, Typography, Container, Grid, Divider } from "@mui/material";
 import "@fontsource/libre-franklin/900.css";
 import "@fontsource/libre-franklin/200.css";
@@ -10,28 +10,31 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchWords } from "./api.ts";
 
 function App() {
-  const [allWords, setAllWords] = useState<string[]>(["Apple", "Banana", "Cherry", "Date",
-    "Elephant", "Falcon", "Giraffe", "Horse",
-    "Test1", "Test2", "Test3", "Test4",
-    "Test5", "Test6", "Test7", "Test8"]);
+  
   const [selectedWords, setSelectedWords] = useState<string[]>([]);
-  //const navigate = useNavigate();
+  const [allWords, setAllWords] = useState<string[]>([]);
+  const { data: backendWords = [], isLoading } = useQuery({ 
+    queryKey: ["words"], 
+    queryFn: fetchWords 
+  });
 
-  // Isaac, my sweet summer child, please turn your attention here
-  // const { data: words = [] } = useQuery({ queryKey: ["words"], queryFn: fetchWords });
+  useEffect(() => {
+    setAllWords(backendWords);
+  }, [backendWords]);
 
-  // const submitWords = useMutation({
-  //   mutationFn: async (selected: string[]) => {
-  //     const response = await fetch("/api/submit", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ words: selected })
-  //     });
-  //     return response.json();
-  //   }
-  // });
-
-
+  const submitWordsMutation = useMutation({
+    mutationFn: async (selected: string[]) => {
+      const response = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ words: selected })
+      });
+      if (!response.ok) {
+        throw new Error('Failed to submit words');
+      }
+      return response.json();
+    }
+  });
 
 
   const shuffleArray = (array: string[]) => {
@@ -106,6 +109,7 @@ function App() {
           variant="contained"
           sx={{ fontFamily: "Libre Franklin", fontWeight: "600", bgcolor: "white", color: "black", borderRadius: "20px", cursor: "pointer", "&:hover": { bgcolor: "white", boxShadow: "none" }, border: "1px solid black", boxShadow: "none", textTransform: "none" }}
           onClick={() => {
+            submitWordsMutation.mutate(selectedWords);
             setSelectedWords([]);
           }}
           disabled={selectedWords.length !== 4} // Disable if not exactly 4 words are selected
