@@ -77,7 +77,7 @@ function App() {
       <Grid container spacing={1} justifyContent="center">
         {completedCategories.map((category, index) => (
           <Grid item xs={12} key={index}>
-            <Card sx={{ borderRadius: "6px", boxShadow: "none", padding: 2, backgroundColor: colors[index], color: "black" }}>
+            <Card sx={{ borderRadius: "6px", boxShadow: "none", padding: 2.5, backgroundColor: colors[index], color: "black" }}>
               <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.category.toUpperCase()}</Typography>
               <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.words.join(", ")}</Typography>
             </Card>
