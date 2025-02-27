@@ -65,15 +65,13 @@ app.get('/api/words', async (req, res) => {
 app.post('/api/submit', async (req, res) => {
   const { words } = req.body;
   console.log("Submitted words:", words);
-  res.json({ success: true });
-
   try {
     const completion = await openai.chat.completions.create({
       messages: [
         {
           role: "user",
           content:
-          "Pretend you are the New York Times Connections game - give me the category of these four words: " + words.join(", ") + ". Respond with just the category, no explanation or other text."
+          "Pretend you are the New York Times Connections game - give me the category of these four words: " + words + ". Respond with just the category, no explanation or other text."
         }
       ],
       model: "gpt-4o",
@@ -81,10 +79,10 @@ app.post('/api/submit', async (req, res) => {
 
     const response = completion.choices[0].message.content;
     console.log("Category:", response);
-    res.json({ category: response });
+    res.json({ success: true, category: response });
   } catch (error) {
     console.error("Error fetching category from OpenAI:", error);
-    res.json({ category: "Error" });
+    res.json({ success: false, category: "Error" });
   }
 });
 

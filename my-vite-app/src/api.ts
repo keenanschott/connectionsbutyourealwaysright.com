@@ -12,7 +12,7 @@ export async function submitWords(selected: string[]): Promise<{ success: boolea
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ words: selected }),
+    body: JSON.stringify({ words: selected.join(", ") }),
   });
   
   if (!response.ok) {
