@@ -79,7 +79,7 @@ function App() {
           <Grid item xs={12} key={index}>
             <Card sx={{ borderRadius: "6px", boxShadow: "none", padding: 2.5, backgroundColor: colors[index], color: "black" }}>
               <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.category.toUpperCase()}</Typography>
-              <Typography fontFamily={"Libre Franklin"} fontWeight={700} fontSize={"16px"}>{category.words.join(", ")}</Typography>
+              <Typography fontFamily={"Libre Franklin"} fontWeight={500} fontSize={"16px"}>{category.words.map((word) => word.toUpperCase()).join(", ")}</Typography>
             </Card>
             
           </Grid>
@@ -110,9 +110,10 @@ function App() {
           ••••
         </Typography>
       </Box>
-      <Box marginBottom={"25px"}>
-      <Button
-          variant="contained"
+      {completedCategories.length < 4 && (
+        <Box marginBottom={"25px"}>
+        <Button
+            variant="contained"
           sx={{ fontFamily: "Libre Franklin", fontWeight: "600", marginRight: "10px", bgcolor: "white", color: "black", borderRadius: "20px", cursor: "pointer", "&:hover": { bgcolor: "white", boxShadow: "none" }, border: "1px solid black", boxShadow: "none", textTransform: "none" }}
           onClick={() => {
             const shuffledWords = shuffleArray(allWords);
@@ -138,6 +139,22 @@ function App() {
           {submitWordsMutation.isPending ? 'Submitting...' : 'Submit'}
         </Button>
       </Box>
+      )}
+      {completedCategories.length === 4 && (
+        <Box marginBottom={"25px"}>
+          <Button
+            variant="contained"
+            sx={{ fontFamily: "Libre Franklin", fontWeight: "600", bgcolor: "white", color: "black", borderRadius: "20px", cursor: "pointer", "&:hover": { bgcolor: "white", boxShadow: "none" }, border: "1px solid black", boxShadow: "none", textTransform: "none" }}
+            onClick={() => {
+              // reload the page
+              window.location.reload();
+            }}
+          >
+            Regenerate
+          </Button>
+        </Box>
+      
+      )}
       <Divider></Divider>
       <Typography fontFamily={"Libre Franklin"} fontWeight={300} fontSize={"14px"} marginTop={"15px"} marginBottom={"15px"}>
         © 2025 Keenan Schott. All Rights Reserved. 
