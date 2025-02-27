@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { Box, Button, Card, Typography, Container, Grid, Divider } from "@mui/material";
-import "@fontsource/libre-franklin/variable.css";
+import "@fontsource/libre-franklin/900.css";
+import "@fontsource/libre-franklin/200.css";
+import "@fontsource/libre-franklin/300.css";
+import "@fontsource/libre-franklin/400.css";
+import "@fontsource/libre-franklin/600.css";
+import "@fontsource/libre-franklin/700.css";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchWords, submitWords } from "./api.ts";
 
