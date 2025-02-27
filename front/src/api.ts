@@ -19,8 +19,8 @@ async function fetchCommonWords(): Promise<string[]> {
         commonWordsList = text
             .split('\n')
             .filter(word => 
-                word.length >= 3 && 
-                word.length <= 12 && 
+                word.length >= 4 && 
+                word.length <= 10 && 
                 !/[^a-zA-Z]/.test(word)
             );
         console.log('Fetched common words list, length:', commonWordsList.length);
@@ -61,43 +61,46 @@ async function getCommonWords(count: number): Promise<string[]> {
 const API_URL = import.meta.env.VITE_API_URL || 'https://v4gp52b86h.execute-api.us-east-1.amazonaws.com/prod';
 
 async function getWikipediaWords(count: number): Promise<string[]> {
-    // Request more words to account for stricter filtering
+    // Get most viewed articles from last week
     const response = await fetch(
         'https://en.wikipedia.org/w/api.php?' + 
-        'action=query&format=json&list=random&rnnamespace=0&rnlimit=25' +
+        'action=query&format=json&generator=mostviewed&gpvimlimit=1000' +
         '&origin=*'
     );
     
     const data = await response.json();
+    const pages = Object.values(data.query.pages);
     
-    // Common words that might indicate a foreign place name
-    const locationIndicators = ['city', 'municipality', 'prefecture', 'district', 'province'];
+    const excludePatterns = [
+        'university', 'institute', 'school', 'company', 'corporation',
+        'fc', 'united', 'athletic', 'railway', 'station', 'airport'
+    ];
     
-    return data.query.random
+    // Randomly shuffle the pages first
+    const shuffledPages = pages
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 25); // Take a random subset of the popular pages
+    
+    return shuffledPages
         .map((page: any) => page.title)
         .filter(title => 
-            // Filter out titles that contain location indicators
-            !locationIndicators.some(indicator => 
-                title.toLowerCase().includes(indicator)
+            !excludePatterns.some(pattern => 
+                title.toLowerCase().includes(pattern)
             )
         )
         .flatMap(title => title.split(/[\s-]/))
         .filter(word => {
-            // Basic word validation
             const isValidWord = 
-                word.length >= 3 && 
-                word.length <= 12 && 
+                word.length >= 4 && 
+                word.length <= 10 && 
                 !/[^a-zA-Z]/.test(word);
             
-            // Additional checks
             if (!isValidWord) return false;
             
-            // Ensure first character is uppercase (likely a proper noun) and rest are lowercase
             const isProperFormat = 
                 word[0] === word[0].toUpperCase() && 
                 word.slice(1) === word.slice(1).toLowerCase();
             
-            // Skip words that look like abbreviations
             const isNotAbbreviation = 
                 !word.split('').every(char => char === char.toUpperCase());
             
@@ -124,8 +127,8 @@ async function shuffleAndCombineWords(arrays: string[][]): string[] {
 
 export async function fetchWords(): Promise<string[]> {
     try {
-        // Random number between 4 and 10 for Wikipedia words
-        const wikiWordCount = Math.floor(Math.random() * 3) + 4; // 4 to 10
+        // Random number between 3 and 7 
+        const wikiWordCount = Math.floor(Math.random() * 3) + 4; // 3 to 7
         const commonWordCount = 16 - wikiWordCount; // Remainder for common words
 
         console.log(`Fetching ${wikiWordCount} Wikipedia words and ${commonWordCount} common words`);
